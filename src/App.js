@@ -1,23 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import StoryForm from "./components/StoryForm";
+import StoryList from "./components/StoryList";
+import DefaultLayout from "./layouts/DefaultLayout";
 
 function App() {
+  const [stories, setStories] = useState([
+    {
+      id: 1,
+      description:
+        "As a logged-in user, I want to be able to report unsuitable content.",
+      priority: 0,
+    },
+    {
+      id: 2,
+      description:
+        "As a website user, I want to be able to vote on features in the poll.",
+      priority: 1,
+    },
+  ]);
+
+  const addStoryHandler = (newStory) => {
+    setStories((prevState) => {
+      return [...prevState, newStory];
+    });
+  };
+
+  const deleteAllHandler = (stories) => {
+    setStories((prevState) => {
+      return prevState.filter((story) => !stories.includes(story));
+    });
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <DefaultLayout>
+        <StoryForm addStory={addStoryHandler} />
+        <StoryList stories={stories} deleteStories={deleteAllHandler} />
+      </DefaultLayout>
     </div>
   );
 }
